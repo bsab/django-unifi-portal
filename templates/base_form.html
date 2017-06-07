@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block extrahead %}
+<style type="text/css">
+  @media only screen and (min-width : 601px) {
+      #id_card_type_container {
+          margin-top: 40px;
+          margin-left: 50px;
+      }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row valign change-form">
+    <div class="{% block formclass %}col s12 m8 offset-m2 l8 offset-l2{% endblock %}">
+        <div class="card">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="card-content">
+                    <span class="card-title grey-text text-darken-2">{% block formtitle %}Form{% endblock %}</span>
+                    {% csrf_token %}
+                    {% block formbody %}{% endblock %}
+                </div>
+                <div class="card-action">
+                    {% block actions %}
+                    <div class="right-align">
+                        {% block formbuttons %}<button class="btn btn-primary" type="submit">Submit</button>{% endblock %}
+                    </div>
+                    {% endblock %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% block result %}
+{% endblock %}
+{% endblock %}

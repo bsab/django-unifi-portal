@@ -1,0 +1,32 @@
+{% extends 'base_form.html' %}
+{% load material_form %}
+
+{% block extrahead %}
+<style type="text/css">
+    {{ form.css }}
+</style>
+{% endblock %}
+
+{% block formclass %}{{ form.blockclass|default:"col s12 m8 offset-m2 l8 offset-l2" }}{% endblock %}
+
+{% block formtitle %}{{ form.title }}{% endblock %}
+
+{% block formbody %}
+
+    {% include form.social_buttons %}
+
+    <h5 style="text-align:center">or</h5>
+
+    {% include form.template %}
+{% endblock %}
+
+{% block formbuttons %}
+    {% include form.buttons %}
+
+    <div class="row">
+        <div class="checkbox-field col s12 required" id="id_terms_accepted_container">
+            <label for="id_terms_accepted">If you click "Log in with Facebook" and are not a user, you will be registered and you agree to Terms & Conditions and Privacy Policy.</label>
+        </div>
+    </div>
+
+{% endblock %}
