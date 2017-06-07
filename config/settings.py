@@ -137,3 +137,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#################################################
+#                 UNIFI CONFIGURATION           #
+#################################################
+UNIFI_SERVER = "https://192.168.10.78:8443"; #Change to the IP/FQDN of your UniFi Server
+#It's important to note that if this server is offsite, you need to have port 8443 forwarded through to it
+UNIFI_USER = "administrator"; #Change to your UniFi Username
+UNIFI_PASSWORD = "xxxx!"; #Change to your UniFi Password
