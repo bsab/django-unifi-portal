@@ -1,116 +1,41 @@
 #!/usr/bin/env python
 # coding: utf-8
+import logging
+
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse_lazy
-from django.conf import settings
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView, View
+from django.contrib.auth.models import Permission
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from forms import UnifiRegistrationForm
 from models import UnifiUser
+from unifi_client import UnifiClient
 
-def index_view(request, *args, **kwargs):
-    _mac = request.GET.get('id', '')
-    _ap = request.GET.get('ap', '')
+from django.shortcuts import redirect
+@login_required
+def myredirect(request):
+    print "view::myredirect"
     _url = request.GET.get('url', '')
-    _t = request.GET.get('t', '')
+    print _url
+    return redirect(_url)
 
-    print "mac:", _mac
-    print "ap:", _ap
-    print "t:", _t
-    print "url:", _url
+class PermissionView(TemplateView):
+    template_name = "index.html"
 
-    context = {
-    }
-    return render(request, 'index.html', context)
+    def get_context_data(self, **kwargs):
+        context = super(PermissionView, self).get_context_data(**kwargs)
+        return context
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(PermissionView, self).dispatch(request, *args, **kwargs)
 
-def send_authorization(id, ap, minutes, url):
-    unifiServer = settings.UNIFI_SERVER;
-    unifiUser = settings.UNIFI_USER
-    unifiPass = settings.UNIFI_USER
-
-    #
-    # 1) Login to Unifi Server
-    #
-    '''
-    //Start Curl for login
-    $ch = curl_init();
-    // We are posting data
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-    // Set up cookies
-    $cookie_file = "/tmp/unifi_cookie";
-    curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
-    curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
-    // Allow Self Signed Certs
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-    // Force SSL3 only
-    curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-    // Login to the UniFi controller
-    curl_setopt($ch, CURLOPT_URL, "$unifiServer/login");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, "login=login&username=$unifiUser&password=$unifiPass");
-    curl_exec ($ch);
-    curl_close ($ch);
-    '''
-
-    #
-    # 2) Send user to authorize and the time allowed
-    #
-    data = {
-        'cmd': 'authorize-guest',
-        'mac': id,
-        'ap': ap,
-        'minutes': minutes
-    }
-    print "data->", data
-
-    '''
-    $ch = curl_init();
-    // We are posting data
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-    // Set up cookies
-    $cookie_file = "/tmp/unifi_cookie";
-    curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
-    curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
-    // Allow Self Signed Certs
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-    // Force SSL3 only
-    curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-    // Make the API Call
-    curl_setopt($ch, CURLOPT_URL, $unifiServer.'/api/cmd/stamgr');
-    curl_setopt($ch, CURLOPT_POSTFIELDS, 'json='.$data);
-    curl_exec ($ch);
-    curl_close ($ch);
-    '''
-
-    #
-    # 3) Logout of the connection
-    #
-    '''
-    $ch = curl_init();
-    // We are posting data
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-    // Set up cookies
-    $cookie_file = "/tmp/unifi_cookie";
-    curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
-    curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
-    // Allow Self Signed Certs
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-    // Force SSL3 only
-    curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-    // Make the API Call
-    curl_setopt($ch, CURLOPT_URL, $unifiServer.'/logout');
-    curl_exec ($ch);
-    curl_close ($ch);
-    echo "Login successful, I should redirect to: ".$url; // $_SESSION['url'];
-    sleep(8); // Small sleep to allow controller time to authorize
-    header('Location: '.$url); // $_SESSION['url']);
-    '''
 
 class UnifiUserRegistration(FormView):
     template_name = 'registration.html'
@@ -127,17 +52,47 @@ class UnifiUserRegistration(FormView):
             return HttpResponseRedirect(reverse('index'))
         return self.render_to_response(context)
 
+    def authorize_as_unifi_guest(self, user):
+        print "*********authorize_as_unifi_guest*********"
+        unifi_client=None
+        try:
+            self._mac = self.request.GET.get('id', '')
+            self._ap = self.request.GET.get('ap', '')
+            self._url = self.request.GET.get('url', '')
+            self._t = self.request.GET.get('t', '')
+
+            print "mac:", self._mac
+            print "ap:", self._ap
+            print "t:", self._t
+            print "url:", self._url
+
+            unifi_client = UnifiClient()
+            self._t = 5;  # ATTENZIONE!!!
+            unifi_client.send_authorization(self._mac, self._ap, self._t)
+
+            permission = Permission.objects.get(name='Can Navigate')
+            user.user_permissions.add(permission)
+
+        except Exception as exp:
+            print "Exception::validate_unifi_request" + str(exp)
+            pass;
+        return unifi_client
+
     def form_valid(self, form):
+        print "*********form_valid*********"
         user = form.save(commit=False);
         user.set_password(form.cleaned_data['password']);
         user.username = form.cleaned_data['username'].lower();
-        user.email = form.cleaned_data['email'].lower();
+        user.email = form.cleaned_data['username'].lower();   #ATTENZIONE: maschero la username con la email
         user.is_active = True;
         user.save();
 
         unifi_user = UnifiUser();
         unifi_user.user = user;
         unifi_user.save();
+
+        #setto il permesso ad utilizzare la wifi
+        self.authorize_as_unifi_guest(user)
 
         # execute login
         user_logged = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password']);

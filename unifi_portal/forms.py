@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.forms import ModelForm
 from django.template import Template
@@ -8,12 +10,13 @@ from material import Layout, Row, Column, Fieldset, Span2, Span3, Span5, Span6, 
 from . import form_mixin as forms
 
 class SocialLoginForm(AuthenticationForm):
-    email = forms.EmailField()
+    #ATTENZIONE: maschero la username con la email
+    username = forms.EmailField(label="Email Address", required=True)
     password = forms.CharField(widget=forms.PasswordInput)
 
     template = Template("""
     {% form %}
-        {% part form.email prefix %}<i class="material-icons prefix">email</i>{% endpart %}
+        {% part form.username prefix %}<i class="material-icons prefix">email</i>{% endpart %}
         {% part form.password prefix %}<i class="material-icons prefix">lock</i>{% endpart %}
     {% endform %}
     """)
@@ -26,20 +29,26 @@ class SocialLoginForm(AuthenticationForm):
 
     buttons = Template("""
         <a href="{% url 'unifi_registration' %}" class="waves-effect waves-teal btn-flat">Register</a>
-        <a class="waves-effect waves-light btn" type="submit">Login</a>
+        <button class="waves-effect waves-light btn" type="submit">Login</button>
     """)
 
 
     title = "Social Login form"
 
+    '''
     def clean(self):
+        print "SocialLoginForm:clean"
         cleaned_data = super(SocialLoginForm, self).clean()
-        if cleaned_data.get('email') == 'john@doe.com':
-            raise forms.ValidationError('John, come on. You are blocked.')
+        addressToVerify = cleaned_data.get('username')
+        match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
+
+        if match == None:
+            raise forms.ValidationError('Email field has bad Syntax.')
+    '''
 
 class UnifiRegistrationForm(ModelForm):
-    username = forms.CharField()
-    email = forms.EmailField(label="Email Address")
+    username = forms.EmailField(label="Email Address")
+    #email = forms.EmailField(label="Email Address")
     password = forms.CharField(widget=forms.PasswordInput)
     password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm password")
     first_name = forms.CharField(required=False)
@@ -48,7 +57,7 @@ class UnifiRegistrationForm(ModelForm):
     receive_news = forms.BooleanField(required=False, label='I want to receive news and special offers')
     agree_toc = forms.BooleanField(required=True, label='I agree with the Terms and Conditions')
 
-    layout = Layout('username', 'email',
+    layout = Layout('username',
                     Row('password', 'password_confirm'),
                     Fieldset('Pesonal details',
                              Row('first_name', 'last_name'),
@@ -56,8 +65,7 @@ class UnifiRegistrationForm(ModelForm):
 
     template = Template("""
     {% form %}
-        {% part form.username prefix %}<i class="material-icons prefix">account_box</i>{% endpart %}
-        {% part form.email prefix %}<i class="material-icons prefix">email</i>{% endpart %}
+        {% part form.username prefix %}<i class="material-icons prefix">email</i>{% endpart %}
         {% part form.password prefix %}<i class="material-icons prefix">lock_open</i>{% endpart %}
     {% endform %}
     """)

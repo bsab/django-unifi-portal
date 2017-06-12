@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'material',
-    'material.frontend',
     'unifi_portal'
 ]
 
@@ -52,6 +51,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -138,10 +139,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#################################################
-#                 UNIFI CONFIGURATION           #
-#################################################
-UNIFI_SERVER = "https://192.168.10.78:8443"; #Change to the IP/FQDN of your UniFi Server
-#It's important to note that if this server is offsite, you need to have port 8443 forwarded through to it
-UNIFI_USER = "administrator"; #Change to your UniFi Username
-UNIFI_PASSWORD = "xxxx!"; #Change to your UniFi Password
+from unifi_config import *

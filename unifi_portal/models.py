@@ -15,6 +15,10 @@ class UnifiUser(models.Model):
     def __str__(self):
         return self.user.username
 
+
     class Meta:
         app_label = 'unifi_portal'
+        permissions = (
+            ("can_navigate", "Can Navigate"),
+        )
 

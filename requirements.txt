@@ -1,2 +1,4 @@
 Django==1.11
 django-material
+requests
+requests-toolbelt
