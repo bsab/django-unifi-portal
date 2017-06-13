@@ -3,6 +3,7 @@ import requests
 import logging
 import cookielib
 import ssl
+import time
 from requests_toolbelt import SSLAdapter
 
 from django.conf import settings
@@ -11,7 +12,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class UnifiClient(object):
-    # Constructor takes the Unifi credentials and base URL to set up a UnifiClient
+    """
+        Constructor takes the Unifi credentials and base URL to set up a UnifiClient
+    """
     def __init__(self, port=8443, version='v4', site_id='default'):
         """Create a UnifiClient object.
 
@@ -48,7 +51,7 @@ class UnifiClient(object):
         pass
 
     def get_resource_url(self, path_name=None):
-        """Take path_name parameter and return a valid formatted URL for a unifi resource"""
+        """T ake path_name parameter and return a valid formatted URL for a unifi resource"""
         if path_name:
             # Return a URL for a specific resource
             url = str.format('{0}{1}:{2}/{3}', 'https://', self.__unifiServer, '8443', path_name)
@@ -59,8 +62,7 @@ class UnifiClient(object):
             return url;
 
     def _login_as_admin(self):
-        # Log in to the API
-        print "\n\nLog in to the API as Admin"
+        """ Log into the API as Admin """
         data = {
             'username': self.__unifiUser,
             'password': self.__unifiPass
@@ -80,9 +82,14 @@ class UnifiClient(object):
         return login_response.status_code
 
     def authorize_guest(self,  guest_mac, ap_mac, minutes):
-        print "\n\nAuthorize the guest"
+        """
+            Authorize a guest based on his MAC address.
+            Arguments:
+                guest_mac     -- the guest MAC address : aa:bb:cc:dd:ee:ff
+                ap_mac        -- access point MAC address (UniFi >= 3.x) (optional)
+                minutes       -- duration of the authorization in minutes
+        """
 
-        # Authorize the guest
         auth = {
             'cmd': 'authorize-guest',
             'mac': guest_mac,
@@ -102,7 +109,7 @@ class UnifiClient(object):
         return auth_response.status_code
 
     def _logout_admin(self):
-        # Log out from the API
+        """ Log out from the API. """
         logout_url = self.get_resource_url('logout')
         logout_response = self.__session.get(logout_url, timeout=5)
         print "********** logout_response **********"
@@ -113,12 +120,31 @@ class UnifiClient(object):
         return logout_response.status_code
 
     def send_authorization(self, guest_mac, ap_mac, minutes):
-        # Login as administrato on Unifi Server
+        """ Login on Unifi Server and authorize a guest based on his MAC address"""
         self._login_as_admin();
 
         res = self.authorize_guest(guest_mac=guest_mac,
                                    minutes=minutes,
                                    ap_mac=ap_mac)
-        print "send_authorization:", res
-
         return res
+
+
+def _authorize_unifi_guest(request):
+    """ Authorize a guest based on parameters passed through the request. """
+    _mac = request.GET.get('id', '')
+    _ap = request.GET.get('ap', '')
+    _url = request.GET.get('url', '')
+    # _t = request.GET.get('t', '')
+    _t = settings.UNIFI_TIMEOUT_MINUTES
+
+    ctx = {
+        'guest_mac': _mac,
+        'ap_mac': _ap,
+        'minutes': _t,
+        'url': _url,
+        'last_login': time.strftime("%c")
+    }
+    unifi_client = UnifiClient()
+    unifi_client.send_authorization(_mac, _ap, _t)
+
+    return ctx

@@ -6,13 +6,13 @@ from django.views import generic, static
 from django.contrib.auth import views as auth_views
 
 from unifi_portal import forms
-from unifi_portal.views import myredirect, PermissionView, UnifiUserRegistration
+from unifi_portal.views import UnifiUserRegistration, authorize_unifi_guest
 
 
 urlpatterns = [
 
-    url(r'guest/s/default/$', myredirect, name="index"),
-    #url(r'guest/s/default/$', validate_unifi_request, name='index'),
+    #url(r'guest/s/default/$', myredirect, name="index"),
+    url(r'guest/s/default/$', authorize_unifi_guest, name='index'),
     url(r'^login/$', auth_views.login,
         {'template_name': 'login.html',
         'authentication_form': forms.SocialLoginForm},
