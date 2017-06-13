@@ -108,6 +108,31 @@ class UnifiClient(object):
 
         return auth_response.status_code
 
+
+    def unauthorize_guest(self,  guest_mac):
+        """
+            Unauthorize  a guest based on his MAC address.
+            Arguments:
+                guest_mac     -- the guest MAC address : aa:bb:cc:dd:ee:ff
+        """
+
+        unauth = {
+            'cmd': 'unauthorize-guest',
+            'mac': guest_mac,
+        }
+
+        if self.version == 'v3' or self.version == 'v4' or self.version == 'v5':
+            api_version = 'api/s/' + self.site_id + '/'
+
+        api_url = self.get_resource_url('api/s/default/cmd/stamgr')
+        auth_response = self.__session.post(api_url, data=json.dumps(unauth))
+        print "********** auth_response **********"
+        print auth_response.status_code
+        print auth_response.text
+        print "************************************"
+
+        return auth_response.status_code
+
     def _logout_admin(self):
         """ Log out from the API. """
         logout_url = self.get_resource_url('logout')
