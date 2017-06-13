@@ -154,21 +154,29 @@ class UnifiClient(object):
         return res
 
 
-def _authorize_unifi_guest(request):
+def _authorize_unifi_guest(request, userprofile=None):
     """ Authorize a guest based on parameters passed through the request. """
     _mac = request.GET.get('id', '')
     _ap = request.GET.get('ap', '')
     _url = request.GET.get('url', '')
     # _t = request.GET.get('t', '')
     _t = settings.UNIFI_TIMEOUT_MINUTES
+    _last_login = time.strftime("%c")
 
     ctx = {
         'guest_mac': _mac,
         'ap_mac': _ap,
         'minutes': _t,
         'url': _url,
-        'last_login': time.strftime("%c")
+        'last_login': _last_login
     }
+    print ctx
+    #saving info on userprofile model
+    if userprofile:
+        userprofile.guest_mac = _mac
+        userprofile.last_backend_login =_last_login
+        userprofile.save();
+
     unifi_client = UnifiClient()
     unifi_client.send_authorization(_mac, _ap, _t)
 

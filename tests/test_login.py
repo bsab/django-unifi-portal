@@ -34,7 +34,7 @@ class LoginTestCase(unittest.TestCase):
     def testIndexView(self):
         print ">> testIndexView"
         self.setUp()
-        self.request.user = self.user
+        #self.request.user = self.user
         response = self.client.get(self.unifi_url)
         self.assertEqual(response.status_code, 200);
 

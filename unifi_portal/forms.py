@@ -1,5 +1,3 @@
-import re
-
 from django import forms
 from django.forms import ModelForm
 from django.template import Template
@@ -9,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from material import Layout, Row, Column, Fieldset, Span2, Span3, Span5, Span6, Span10
 from . import form_mixin as forms
 
-class SocialLoginForm(AuthenticationForm):
+class UnifiLoginForm(AuthenticationForm):
     #ATTENZIONE: maschero la username con la email
     username = forms.EmailField(label="Email Address", required=True)
     password = forms.CharField(widget=forms.PasswordInput)
@@ -22,7 +20,7 @@ class SocialLoginForm(AuthenticationForm):
     """)
 
     social_buttons = Template("""
-        <p style="text-align:center"><a class="waves-effect waves-light btn-large blue"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with facebook</a></p>
+        <p style="text-align:center"><a href="/auth/login/facebook" class="waves-effect waves-light btn-large blue"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with facebook</a></p>
         <br>
         <p style="text-align:center"><a class="waves-effect waves-light btn-large orange"><i class="fa fa-google" aria-hidden="true"></i> Sign in with google&nbsp;</a></p>
     """)
@@ -33,18 +31,7 @@ class SocialLoginForm(AuthenticationForm):
     """)
 
 
-    title = "Social Login form"
-
-    '''
-    def clean(self):
-        print "SocialLoginForm:clean"
-        cleaned_data = super(SocialLoginForm, self).clean()
-        addressToVerify = cleaned_data.get('username')
-        match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
-
-        if match == None:
-            raise forms.ValidationError('Email field has bad Syntax.')
-    '''
+    title = "Unifi Login form"
 
 class UnifiRegistrationForm(ModelForm):
     username = forms.EmailField(label="Email Address")
@@ -59,7 +46,7 @@ class UnifiRegistrationForm(ModelForm):
 
     layout = Layout('username',
                     Row('password', 'password_confirm'),
-                    Fieldset('Pesonal details',
+                    Fieldset('Personal details',
                              Row('first_name', 'last_name'),
                              'gender', 'receive_news', 'agree_toc'))
 
@@ -67,6 +54,7 @@ class UnifiRegistrationForm(ModelForm):
     {% form %}
         {% part form.username prefix %}<i class="material-icons prefix">email</i>{% endpart %}
         {% part form.password prefix %}<i class="material-icons prefix">lock_open</i>{% endpart %}
+        {% part form.password_confirm prefix %}<i class="material-icons prefix">lock_open</i>{% endpart %}
     {% endform %}
     """)
 

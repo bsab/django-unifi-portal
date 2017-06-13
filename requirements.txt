@@ -2,3 +2,6 @@ Django==1.11
 django-material
 requests
 requests-toolbelt
+django-braces
+django-rest-framework-social-oauth2
+Pillow
