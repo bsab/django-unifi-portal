@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Django Unifi Portal</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block extrahead %}
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block content %}
+
 <h1>Welcome Django Unifi Portal</h1>
-</body>
-</html>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center orange-text">Welcome Django Unifi Portal</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">You've got 60 minutes of free navigation!</h5>
+      </div>
+      <div class="row center">
+          <img src ="{%  static 'img/freewifi.png' %}">
+      </div>
+      <br><br>
+
+    </div>
+  </div>
+{% endblock %}
