@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 from django.core.urlresolvers import reverse_lazy
 
-LOGIN_URL = '/login'
+LOGIN_URL = '/unifi-portal/login'
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 ROOT_URLCONF = 'config.urls'
 
@@ -155,9 +155,6 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
 
-    # django-rest-framework-social-oauth2
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-
     # Django
     'django.contrib.auth.backends.ModelBackend',
 
@@ -179,7 +176,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
     'unifi_portal.pipeline.user_details',
     'unifi_portal.pipeline.save_profile',
-    'social_core.pipeline.debug.debug'
+    'social_core.pipeline.debug.debug',
 )
 
 # Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook.

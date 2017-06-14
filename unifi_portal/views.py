@@ -15,24 +15,75 @@ from django.shortcuts import render_to_response, redirect
 from django.utils.http import is_safe_url
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView
+from django.contrib.auth.models import User
+from django.views.generic.detail import SingleObjectMixin
 
-from forms import UnifiRegistrationForm
-from models import UnifiUser
-from unifi_client import _authorize_unifi_guest
+from unifi_client import UnifiClient
 from unifi_portal import forms
+from unifi_portal.models import UnifiUser
 
-@login_required
-def authorize_unifi_guest(request):
-    """ Authorize a guest based on his MAC address.  """
-    try:
-        ctx = _authorize_unifi_guest(request)
+
+class UserAuthorizeView(SingleObjectMixin, View):
+    """ Authorize a guest based on parameters passed through the request. """
+
+    template_name = 'index.html'
+
+    def get_user_profile_inst(self):
+        up = None;
+        u = User.objects.get(username=self.request.user)
+        try:
+            up = UnifiUser.objects.get(user=u)
+        except:
+            up = None;
+        return up;
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseForbidden();
+
+    def get(self, request, *args, **kwargs):
+        ctx = {}
+        try:
+            _mac = request.GET.get('id', '')
+            _ap = request.GET.get('ap', '')
+            _url = request.GET.get('url', '')
+            # _t = request.GET.get('t', '')
+            _t = settings.UNIFI_TIMEOUT_MINUTES
+            _last_login = time.strftime("%c")
+
+            ctx = {
+                'guest_mac': _mac,
+                'ap_mac': _ap,
+                'minutes': _t,
+                'url': _url,
+                'last_login': _last_login
+            }
+
+            # Saving info on userprofile Model
+            userprofile = self.get_user_profile_inst()
+            userprofile.guest_mac = _mac
+            userprofile.last_backend_login = _last_login
+            userprofile.save()
+
+            # Ask authorization to unifi server
+            unifi_client = UnifiClient()
+            unifi_client.send_authorization(_mac, _ap, _t)
+
+            if _url:
+                return HttpResponseRedirect(_url)
+        except:
+            pass
+
         return render_to_response('index.html', ctx, RequestContext(request))
-    except Exception as exp:
-        return HttpResponseForbidden()
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserAuthorizeView, self).dispatch(request, *args, **kwargs)
+
 
 class UnifiUserLogin(FormView):
     """
@@ -49,12 +100,12 @@ class UnifiUserLogin(FormView):
     def dispatch(self, request, *args, **kwargs):
         # Sets a test cookie to make sure the user has cookies enabled
         request.session.set_test_cookie()
-        #request.session.set_cookie('mynext', self.request.GET['next']) #deprecated!
 
         # Set the request url from unifi into a cookie to get in registration form
         try:
             request.session['mynext'] = self.request.GET['next']
-        except:
+        except Exception as e:
+            print "EXCEPTION:UnifiUserLogin " + str(e)
             pass;
 
         return super(UnifiUserLogin, self).dispatch(request, *args, **kwargs)
@@ -77,10 +128,8 @@ class UnifiUserLogin(FormView):
 
 
 class UnifiUserLogout(RedirectView):
-    """
-    Provides users the ability to logout
-    """
-    url = '/login/'
+    """ Provides users the ability to logout.  """
+    url = '/unifi-portal/login/'
     template_name = 'logged_out.html'
 
     def get(self, request, *args, **kwargs):
@@ -90,7 +139,7 @@ class UnifiUserLogout(RedirectView):
 
 class UnifiUserRegistration(FormView):
     template_name = 'registration.html'
-    form_class = UnifiRegistrationForm
+    form_class = forms.UnifiRegistrationForm
 
     def get_context_data(self, **kwargs):
 

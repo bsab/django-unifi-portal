@@ -1,18 +1,16 @@
+import urllib
+import json
+import requests
+from datetime import datetime
+
+from django.utils.translation import ugettext_lazy as _
+from django.core.files.base import ContentFile
 from django.shortcuts import redirect
-from django.conf import settings
-
-from social_core.pipeline.partial import partial
-
-from django.core import signing
-from django.core.signing import BadSignature
-from django.contrib.sessions.models import Session
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
-from django.db import IntegrityError
+from django.http import HttpResponseRedirect
+from social_core.pipeline.partial import partial
 
-from django.conf import settings
 from unifi_portal.models import UnifiUser
 
 @partial
@@ -25,18 +23,6 @@ def require_email(strategy, details, user=None, is_new=False, *args, **kwargs):
             details['email'] = email
         else:
             return redirect('require_email')  # <--SE IL SOCIAL NON FORNISCE LA MAIL LA DEVO RICHIEDERE A MANO
-
-
-"""
-NOTA:
-    Ho dovuto modificare questo metodo aggiungendo il controllo su UserProfile
-    perche' accedendo con altri social non vado a sovrascrivere i dati
-    originali presi da facebook
-
-    metodo originale: social.pipeline.user.user_details
-
-"""
-
 
 def user_details(strategy, details, user=None, *args, **kwargs):
     """Update user details using data from provider."""
@@ -67,23 +53,12 @@ def user_details(strategy, details, user=None, *args, **kwargs):
                 strategy.storage.user.changed(user)
 
 
-# end def
-
-import urllib
-import json
-import requests
-from datetime import datetime
-from django.core.files.base import ContentFile
-
-
 def save_profile(backend, user, response, *args, **kwargs):
     profile = None
 
     if not UnifiUser.objects.filter(user=user).exists():
 
-        print "save_profile:UserProfile NOT exist, creating.."
         if backend.name == 'facebook':
-            print "facebook.response", response
             try:
                 profile = UnifiUser.objects.get(user=user);
             except UnifiUser.DoesNotExist:
@@ -96,23 +71,18 @@ def save_profile(backend, user, response, *args, **kwargs):
             profile.city = response.get('hometown')
             profile.user.email = response.get('email')
 
-            print "FACEBOOK:seleziono birthday"
             birthday_date = None;
             try:
                 birthday = response.get('birthday')
                 birthday_date = datetime.strptime(birthday, '%m/%d/%Y')
-                print "birthday_date-->", birthday_date
             except Exception as eb:
-                print "Exception with birthday " + str(eb)
                 pass;
             profile.dob = birthday_date
 
-            print "FACEBOOK:seleziono username"
             fbuid = response.get('id')
             profile.user.username = fbuid  # la mail e' troppo grande
             profile.user.save();
 
-            print "FACEBOOK:seleziono immagine profilo"
             try:
                 image_name = 'fb_avatar_%s.jpg' % fbuid
                 image_url = 'http://graph.facebook.com/%s/picture?type=large' % fbuid
@@ -122,9 +92,7 @@ def save_profile(backend, user, response, *args, **kwargs):
                     image_name,
                     ContentFile(image_stream.read()),
                 )
-                print "FACEBOOK: immagine profilo -->", image_name
             except Exception as e:
-                print "Exception with image " + str(e)
                 pass;
 
             # INIT - 14-12-2016
@@ -156,86 +124,8 @@ def save_profile(backend, user, response, *args, **kwargs):
             except Exception as e:
                 print "FB Exception with locale " + str(e)
                 pass;
-            # END - 14-12-2016
-
-            # controllo che lo username non sia un ID in tal caso genero
-            # uno unsername composto dal nome e dal cognome
-            # if profile.user.username.isdigit():
-            #    #print "trovato username numerico!!!!!!!!"
-            #    profile.user.username = str(profile.name + "_" + profile.surname);
-            #    profile.user.save();
-            # end if
-
-            print "FACEBOOK:seleziono last_backend_login"
             profile.last_backend_login = backend.name;
             profile.save();
-
-        elif backend.name == 'twitter':
-            if not profile.picture:
-                if response.get('profile_image_url'):
-                    image_name = 'tw_avatar_%s.jpg' % profile.user.username
-                    print "image_name:", image_name
-                    image_url = response.get('profile_image_url')
-                    print "image_url:", image_url
-                    image_stream = urllib.urlopen(image_url)
-
-                    profile.picture.save(
-                        image_name,
-                        ContentFile(image_stream.read()),
-                    )
-                    profile.save();
-        elif backend.name == 'linkedin-oauth2':
-            if not profile.picture:
-                if response.get('pictureUrl'):
-                    image_name = 'linked_avatar_%s.jpg' % profile.user.username
-                    print "image_name:", image_name
-                    image_url = response.get('pictureUrl')
-                    print "image_url:", image_url
-                    image_stream = urllib.urlopen(image_url)
-
-                    profile.picture.save(
-                        image_name,
-                        ContentFile(image_stream.read()),
-                    )
-                    profile.save();
-        elif backend.name == 'instagram':
-            '''
-            if (response.get('user')).get('profile_picture'): #{u'user': {u'bio': ....
-                image_name = 'instagram_avatar_%s.jpg' % profile.user.username
-                print "image_name:", image_name
-                image_url = (response.get('user')).get('profile_picture')
-                print "image_url:", image_url
-                image_stream = urllib.urlopen(image_url)
-
-                profile.picture.save(
-                    image_name,
-                    ContentFile(image_stream.read()),
-                )
-            '''
-            pass;
-        elif backend.name == 'google-oauth2':
-            if not profile.gender:
-                profile.gender = response.get('gender');
-                profile.save();
-
-            if not profile.job:
-                profile.job = response.get('occupation');
-                profile.save();
-
-            if not profile.picture:
-                if (response.get('image')).get('url'):
-                    image_name = 'google_avatar_%s.jpg' % profile.user.username
-                    print "image_name:", image_name
-                    image_url = (response.get('image')).get('url')
-                    print "image_url:", image_url
-                    image_stream = urllib.urlopen(image_url)
-
-                    profile.picture.save(
-                        image_name,
-                        ContentFile(image_stream.read()),
-                    )
-                    profile.save();
-
     else:
         # in questo caso sto solo richiedendo una nuova associazione social
         print "UserProfile already exist..nothing..."
@@ -245,30 +135,19 @@ def save_profile(backend, user, response, *args, **kwargs):
         profile = UnifiUser.objects.get(user=user);
         profile.user.is_active = True;
         profile.user.save();
-    # end if
-
-# end def save_profile
-
-
-'''
-Fix to resolve AuthAlreadyAssociated Exception in Python Social Auth:
-
- http://stackoverflow.com/questions/13018147/authalreadyassociated-exception-in-django-social-auth
-
-'''
-from rest_framework.authtoken.models import Token
-from django.utils.translation import ugettext_lazy as _
 
 
 def manage_auth_already_associated(backend, uid, user=None, *args, **kwargs):
-    print "manage_auth_already_associated"
-    '''OVERRIDED: It will logout the current user
-    instead of raise an exception '''
+    """ OVERRIDED: It will logout the current user
+    instead of raise an exception
+
+    Fix to resolve AuthAlreadyAssociated Exception in Python Social Auth:
+     http://stackoverflow.com/questions/13018147/authalreadyassociated-exception-in-django-social-auth
+   """
 
     provider = backend.name
     social = backend.strategy.storage.user.get_social_auth(provider, uid)
     if social:
-        print "social"
         if user and social.user != user:
             messages.error(backend.strategy.request, _('This account is already in use.'))
             return HttpResponseRedirect(reverse('home'))
@@ -281,3 +160,4 @@ def manage_auth_already_associated(backend, uid, user=None, *args, **kwargs):
             'user': user,
             'is_new': user is None,
             'new_association': False}
+

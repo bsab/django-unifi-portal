@@ -19,10 +19,14 @@ class UnifiLoginForm(AuthenticationForm):
     {% endform %}
     """)
 
+    logo = Template("""
+        <p style="text-align:center"> <img src="/static/img/logo.png">  </p>
+        <br>
+    """)
+
     social_buttons = Template("""
         <p style="text-align:center"><a href="/auth/login/facebook" class="waves-effect waves-light btn-large blue"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with facebook</a></p>
         <br>
-        <p style="text-align:center"><a class="waves-effect waves-light btn-large orange"><i class="fa fa-google" aria-hidden="true"></i> Sign in with google&nbsp;</a></p>
     """)
 
     buttons = Template("""
@@ -31,7 +35,7 @@ class UnifiLoginForm(AuthenticationForm):
     """)
 
 
-    title = "Unifi Login form"
+    title = "Unifi Login"
 
 class UnifiRegistrationForm(ModelForm):
     username = forms.EmailField(label="Email Address")

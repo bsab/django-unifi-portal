@@ -9,7 +9,7 @@
 
 {% block formclass %}{{ form.blockclass|default:"col s12 m8 offset-m2 l8 offset-l2" }}{% endblock %}
 
-{% block formtitle %}{{ form.title }}{% endblock %}
+{% block formtitle %}<h4 style='text-align:center'>{{ form.title }}</h4>{% endblock %}
 
 {% block formbody %}
     {% include form.template %}

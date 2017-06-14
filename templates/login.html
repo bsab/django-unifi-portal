@@ -1,5 +1,6 @@
 {% extends 'base_form.html' %}
 {% load material_form %}
+{% load static %}
 
 {% block extrahead %}
 <style type="text/css">
@@ -9,9 +10,11 @@
 
 {% block formclass %}{{ form.blockclass|default:"col s12 m8 offset-m2 l8 offset-l2" }}{% endblock %}
 
-{% block formtitle %}{{ form.title }}{% endblock %}
+{% block formtitle %}  <h4 style='text-align:center'>{{ form.title }}</h4>{% endblock %}
 
 {% block formbody %}
+
+    {% include form.logo %}
 
     {% include form.social_buttons %}
 
@@ -21,11 +24,12 @@
 {% endblock %}
 
 {% block formbuttons %}
+
     {% include form.buttons %}
 
-    <div class="row left-align">
-        <div class="checkbox-field col s12 required" id="id_terms_accepted_container">
-            <label for="id_terms_accepted">If you click "Log in with Facebook" and are not a user, you will be registered and you agree to Terms & Conditions and Privacy Policy.</label>
+    <div class="row left-align" style="margin-top:10px">
+        <div class="ol s12 required" id="id_terms_accepted_container">
+            <label>If you click "Log in with Facebook" and are not a user, you will be registered and you agree to Terms & Conditions and Privacy Policy.</label>
         </div>
     </div>
 
