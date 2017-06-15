@@ -162,11 +162,15 @@ class UnifiUserRegistration(FormView):
         user.set_password(form.cleaned_data['password']);
         user.username = form.cleaned_data['username'].lower();
         user.email = form.cleaned_data['username'].lower();   #ATTENZIONE: maschero la username con la email
+        user.first_name = form.cleaned_data['first_name'].lower();
+        user.last_name = form.cleaned_data['last_name'].lower();
         user.is_active = True;
         user.save();
 
         unifi_user = UnifiUser();
         unifi_user.user = user;
+        unifi_user.phone = form.cleaned_data['phone'];
+        unifi_user.gender = form.cleaned_data['gender'];
         unifi_user.save();
 
         # execute login
