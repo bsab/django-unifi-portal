@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-unifi-portal',
-    version='0.0.3',
+    version='0.0.1',
     author='bsab',
     author_email='tino.saba@gmail.com',
     url='https://github.com/bsab/django-unifi-portal',
