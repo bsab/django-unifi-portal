@@ -15,7 +15,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "django>=1.10",
-        "django-braces==1.9.0",
+        "django-braces",
         "requests",
         "django-material",
         "requests-toolbelt",
