@@ -1,3 +1,3 @@
 include README.md
-recursive-include unifi_portal/templates *
+recursive-include templates *
 recursive-include unifi_portal/static *
