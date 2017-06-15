@@ -26,7 +26,7 @@ Quick start
 -  Setup Django-Unifi application in Python environment:
 
 
-       $ pip install django-unifi
+       $ pip install git+https://github.com/bsab/django-unifi-portal.git
 
 
 -  Migrate the unifi_portal app to create the user model:
