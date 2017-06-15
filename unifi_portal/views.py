@@ -1,26 +1,24 @@
 #!/usr/bin/env python
 # coding: utf-8
-import logging
+
 import time
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse_lazy
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import Permission
+from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.utils.http import is_safe_url
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout
+from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView
-from django.contrib.auth.models import User
 from django.views.generic.detail import SingleObjectMixin
 
 from unifi_client import UnifiClient

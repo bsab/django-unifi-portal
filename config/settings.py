@@ -76,6 +76,7 @@ TEMPLATES = [
                 'material.frontend.context_processors.modules',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'unifi_portal.context_processor.unifi_context'
             ],
         },
     },
@@ -178,6 +179,7 @@ SOCIAL_AUTH_PIPELINE = (
     'unifi_portal.pipeline.save_profile',
     'social_core.pipeline.debug.debug',
 )
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
 # Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook.
 # Email is not sent by default, to get it, you must request the email permission:

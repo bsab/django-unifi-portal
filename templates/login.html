@@ -10,11 +10,17 @@
 
 {% block formclass %}{{ form.blockclass|default:"col s12 m8 offset-m2 l8 offset-l2" }}{% endblock %}
 
-{% block formtitle %}  <h4 style='text-align:center'>{{ form.title }}</h4>{% endblock %}
+{% block formtitle %}  {% endblock %}
 
 {% block formbody %}
 
     {% include form.logo %}
+
+    <div style='text-align:center;margin-bottom: 30px'>
+        <h6>Welcome to <b>{{ ssid }}</b> free WIFI</h6>
+        <h6>If you have Facebook or a registered account, login below.</h6>
+    </div>
+
 
     {% include form.social_buttons %}
 

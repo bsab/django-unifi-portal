@@ -136,7 +136,9 @@ class UnifiClient(object):
         """ Login on Unifi Server and authorize a guest based on his MAC address"""
         self.login_on_unifi_server();
 
+        status_code = -1;
         if not self._is_authorized(guest_mac):
-            self.authorize_guest(guest_mac=guest_mac,
-                                 minutes=minutes,
-                                 ap_mac=ap_mac)
+            status_code = self.authorize_guest(guest_mac=guest_mac,
+                                               minutes=minutes,
+                                               ap_mac=ap_mac)
+            return status_code

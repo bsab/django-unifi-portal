@@ -46,6 +46,7 @@ class TestAPI(TestCase):
     def test_send_authorization(self):
         print "test_send_authorization"
         ufc = get_unifi_client();
+        ufc.login_on_unifi_server()
         status_code = ufc.send_authorization(guest_mac='04:4b:ed:25:c6:b3',
                                              minutes='10',
                                              ap_mac='04:4b:ed:25:c6:b3')

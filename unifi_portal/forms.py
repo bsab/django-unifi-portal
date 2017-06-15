@@ -20,7 +20,7 @@ class UnifiLoginForm(AuthenticationForm):
     """)
 
     logo = Template("""
-        <p style="text-align:center"> <img src="/static/img/logo.png">  </p>
+        <p style="text-align:center"> <img src="/static/img/DjangoUnifi.png">  </p>
         <br>
     """)
 
@@ -44,6 +44,7 @@ class UnifiRegistrationForm(ModelForm):
     password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm password")
     first_name = forms.CharField(required=False)
     last_name = forms.CharField(required=False)
+    phone = forms.CharField()
     gender = forms.ChoiceField(choices=((None, ''), ('F', 'Female'), ('M', 'Male'), ('O', 'Other')))
     receive_news = forms.BooleanField(required=False, label='I want to receive news and special offers')
     agree_toc = forms.BooleanField(required=True, label='I agree with the Terms and Conditions')
@@ -52,6 +53,7 @@ class UnifiRegistrationForm(ModelForm):
                     Row('password', 'password_confirm'),
                     Fieldset('Personal details',
                              Row('first_name', 'last_name'),
+                             'phone',
                              'gender', 'receive_news', 'agree_toc'))
 
     template = Template("""
@@ -59,14 +61,24 @@ class UnifiRegistrationForm(ModelForm):
         {% part form.username prefix %}<i class="material-icons prefix">email</i>{% endpart %}
         {% part form.password prefix %}<i class="material-icons prefix">lock_open</i>{% endpart %}
         {% part form.password_confirm prefix %}<i class="material-icons prefix">lock_open</i>{% endpart %}
+
+        {% part form.first_name prefix %}<i class="material-icons prefix">account_box</i>{% endpart %}
+        {% part form.last_name prefix %}<i class="material-icons prefix">account_box</i>{% endpart %}
+        {% part form.phone prefix %}<i class="material-icons prefix">phone</i>{% endpart %}
+        {% part form.gender prefix %}<i class="material-icons prefix">people</i>{% endpart %}
     {% endform %}
+    """)
+
+    logo = Template("""
+        <p style="text-align:center"> <img src="/static/img/DjangoUnifi.png">  </p>
+        <br>
     """)
 
     buttons = Template("""
         <button class="waves-effect waves-light btn" type="submit">Submit</button>
     """)
 
-    title = "Registration form"
+    title = "Registration"
 
     class Meta:
         model = User

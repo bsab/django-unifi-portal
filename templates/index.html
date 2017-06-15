@@ -2,25 +2,50 @@
 {% load static %}
 
 {% block extrahead %}
-<style type="text/css">
-</style>
+    <style type="text/css">
+    </style>
 {% endblock %}
 
 {% block content %}
 
-<h1>Welcome Django Unifi Portal</h1>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-      <br><br>
-      <h1 class="header center orange-text">Welcome Django Unifi Portal</h1>
-      <div class="row center">
-        <h5 class="header col s12 light">You've got 60 minutes of free navigation!</h5>
-      </div>
-      <div class="row center">
-          <img src ="{%  static 'img/freewifi.png' %}">
-      </div>
-      <br><br>
+    <div class="blue lighten-5">
+        <div class="row" style="margin-bottom: 0px">
+            <div class="col m3">
+            </div>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content" style="padding: 5px;">
+                        <h3 class="header center orange-text">Welcome to {{ ssid }}</h3>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row center" style="margin-bottom: 0px">
+                <h4 class="header col s12 light">Connected!</h4>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <!--   Icon Section   -->
+                <div class="row" style="margin-bottom: 0px">
+                    <div class="col s12 m4">
+                    </div>
+
+                    <div class="col s12 m4">
+                        <div class="icon-block center">
+                            <img src="{%  static 'img/unlock.png' %}">
+                            <h5 class="light">You've got a {{ timeout }} minutes of free navigation!</h5>
+                        </div>
+                    </div>
+                    <div class="col s12 m4">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
 {% endblock %}

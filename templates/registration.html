@@ -9,9 +9,17 @@
 
 {% block formclass %}{{ form.blockclass|default:"col s12 m8 offset-m2 l8 offset-l2" }}{% endblock %}
 
-{% block formtitle %}<h4 style='text-align:center'>{{ form.title }}</h4>{% endblock %}
+
+{% block formtitle %}{% endblock %}
 
 {% block formbody %}
+    {% include form.logo %}
+
+   <div style='text-align:center;margin-bottom: 30px'>
+        <h6>Register to <b>{{ ssid }}</b> free WIFI</h6>
+        <h6>If you have an account, you can log in with your E-mail and your password. If you have no account, please register using the following form.</h6>
+    </div>
+
     {% include form.template %}
 {% endblock %}
 
