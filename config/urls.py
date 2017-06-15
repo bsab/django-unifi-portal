@@ -20,8 +20,6 @@ from material.frontend import urls as frontend_urls
 from unifi_portal import urls as unifi_urls
 
 urlpatterns = [
-    #url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(r'', include(unifi_urls)),
-    #url(r'', include(frontend_urls)),
 ]
