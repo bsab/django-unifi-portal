@@ -14,7 +14,7 @@ from django.utils.http import is_safe_url
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
-from django.views import View
+from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
@@ -26,7 +26,7 @@ from unifi_portal import forms
 from unifi_portal.models import UnifiUser
 
 
-class UserAuthorizeView(SingleObjectMixin, View):
+class UserAuthorizeView(SingleObjectMixin, TemplateView):
     """ Authorize a guest based on parameters passed through the request. """
 
     template_name = 'index.html'
@@ -40,26 +40,26 @@ class UserAuthorizeView(SingleObjectMixin, View):
             up = None;
         return up;
 
-    def post(self, request, *args, **kwargs):
-        return HttpResponseForbidden();
+    def get_context_data(self, **kwargs):
+        """Update view context."""
+        #context = super(UserAuthorizeView, self).get_context_data(**kwargs)
+        context={}
 
-    def get(self, request, *args, **kwargs):
-        ctx = {}
         try:
-            _mac = request.GET.get('id', '')
-            _ap = request.GET.get('ap', '')
-            _url = request.GET.get('url', '')
-            # _t = request.GET.get('t', '')
+            _mac = self.request.GET.get('id', '')
+            _ap = self.request.GET.get('ap', '')
+            _url = self.request.GET.get('url', '')
+            # _t = self.request.GET.get('t', '')
             _t = settings.UNIFI_TIMEOUT_MINUTES
             _last_login = time.strftime("%c")
 
-            ctx = {
+            context.update({
                 'guest_mac': _mac,
                 'ap_mac': _ap,
                 'minutes': _t,
                 'url': _url,
                 'last_login': _last_login
-            }
+            })
 
             # Saving info on userprofile Model
             userprofile = self.get_user_profile_inst()
@@ -71,12 +71,27 @@ class UserAuthorizeView(SingleObjectMixin, View):
             unifi_client = UnifiClient()
             unifi_client.send_authorization(_mac, _ap, _t)
 
-            if _url:
-                return HttpResponseRedirect(_url)
-        except:
+            #if _url:
+            #    return HttpResponseRedirect(_url)
+        except Exception as exp_debug:
+            print "EXCEPTION: " + str(exp_debug)
             pass
 
-        return render_to_response('index.html', ctx, RequestContext(request))
+        return context
+
+    def post(self, request, *args, **kwargs):
+        """Deny post requests."""
+        return HttpResponseForbidden();
+
+    def get(self, request, *args, **kwargs):
+        """Response with rendered html template."""
+        context = self.get_context_data()
+
+        if '_url' in context:
+            if context['_url']: #if i try to go on an url without wifi login
+                return HttpResponseRedirect(context['_url'])
+
+        return self.render_to_response(context)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):

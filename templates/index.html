@@ -8,14 +8,14 @@
 
 {% block content %}
 
-    <div class="blue lighten-5">
+    <div class="white">
         <div class="row" style="margin-bottom: 0px">
             <div class="col m3">
             </div>
             <div class="col s12 m6">
                 <div class="card">
                     <div class="card-content" style="padding: 5px;">
-                        <h3 class="header center orange-text">Welcome to {{ ssid }}</h3>
+                        <h3 class="header center orange-text">Welcome to <b>{{ ssid }}</b></h3>
                     </div>
 
                 </div>
@@ -37,8 +37,9 @@
 
                     <div class="col s12 m4">
                         <div class="icon-block center">
-                            <img src="{%  static 'img/unlock.png' %}">
-                            <h5 class="light">You've got a {{ timeout }} minutes of free navigation!</h5>
+                            <img src="{{ logo }}">
+                            <h5 class="light">You've got {{ timeout }} minutes of free navigation!</h5>
+                            <h5 class="light">Close this page and enjoy!</h5>
                         </div>
                     </div>
                     <div class="col s12 m4">

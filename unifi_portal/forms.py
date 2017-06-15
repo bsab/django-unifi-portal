@@ -3,8 +3,9 @@ from django.forms import ModelForm
 from django.template import Template
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import AuthenticationForm
+from django.conf import settings
 
-from material import Layout, Row, Column, Fieldset, Span2, Span3, Span5, Span6, Span10
+from material import Layout, Row, Fieldset
 from . import form_mixin as forms
 
 class UnifiLoginForm(AuthenticationForm):
@@ -17,11 +18,6 @@ class UnifiLoginForm(AuthenticationForm):
         {% part form.username prefix %}<i class="material-icons prefix">email</i>{% endpart %}
         {% part form.password prefix %}<i class="material-icons prefix">lock</i>{% endpart %}
     {% endform %}
-    """)
-
-    logo = Template("""
-        <p style="text-align:center"> <img src="/static/img/DjangoUnifi.png">  </p>
-        <br>
     """)
 
     social_buttons = Template("""
@@ -67,11 +63,6 @@ class UnifiRegistrationForm(ModelForm):
         {% part form.phone prefix %}<i class="material-icons prefix">phone</i>{% endpart %}
         {% part form.gender prefix %}<i class="material-icons prefix">people</i>{% endpart %}
     {% endform %}
-    """)
-
-    logo = Template("""
-        <p style="text-align:center"> <img src="/static/img/DjangoUnifi.png">  </p>
-        <br>
     """)
 
     buttons = Template("""
