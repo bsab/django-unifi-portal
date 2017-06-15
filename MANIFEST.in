@@ -1,3 +1,4 @@
 include README.md
-recursive-include templates *
+include LICENSE
+recursive-include unifi_portal/templates *
 recursive-include unifi_portal/static *
