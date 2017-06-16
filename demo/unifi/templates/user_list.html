@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <style type="text/css">
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="white">
+        <div class="row" style="margin-bottom: 0px">
+            <div class="col m3">
+            </div>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content" style="padding: 5px;">
+                        <p style="text-align:center"> <img src="{{ logo }}">  </p>
+                        <h3 class="header center orange-text"><b>{{ ssid }}</b></h3>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <div class="panel panel-default">
+
+                    <div class="panel-body">
+                        <table id="user-table" class="table table-hover demo-table-search">
+                            <thead>
+                            <tr>
+                                <th>Pic</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Email</th>
+                                <th>Gender</th>
+                                <th>City</th>
+                                <th>Phone</th>
+                                <th>Last Login</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for userprofile in user_list %}
+                                <tr id="row-user-{{ user.pk }}">
+                                    <td><img src="{{ userprofile.picture.url }}" width="30" height="30" /></td>
+                                    <td>{{ userprofile.user.first_name }}</td>
+                                    <td>{{ userprofile.user.last_name }}</td>
+                                    <td>{{ userprofile.user.email }}</td>
+                                    <td>{{ userprofile.gender }}</td>
+                                    <td>{{ userprofile.city }}</td>
+                                    <td>{{ userprofile.phone }}</td>
+                                    <td>{{ userprofile.last_backend_login }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}
