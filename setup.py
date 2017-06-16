@@ -7,7 +7,7 @@ setup(
     version='0.0.1',
     author='bsab',
     author_email='tino.saba@gmail.com',
-    url='https://github.com/bsab/django-unifi-portal',
+    #url='https://github.com/bsab/django-unifi-portal',
     description='Authenticate Unifi WiFi Guests with Django.',
     long_description=open('README.md').read(),
     packages=find_packages(exclude=['test*']),

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unifi_portal.unifi_client import UnifiClient
+from django_unifi_portal.unifi_client import UnifiClient
 
 
 def get_unifi_client():

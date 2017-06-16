@@ -6,7 +6,7 @@ from django.test.client import Client
 from django.db import IntegrityError
 
 from django.conf import settings
-from unifi_portal.models import UnifiUser
+from django_unifi_portal.models import UnifiUser
 
 class LoginTestCase(unittest.TestCase):
     def setUp(self):

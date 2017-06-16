@@ -27,7 +27,7 @@ class UnifiUser(models.Model):
 
 
     class Meta:
-        app_label = 'unifi_portal'
+        app_label = 'django_unifi_portal'
         permissions = (
             ("can_navigate", "Can Navigate"),
         )

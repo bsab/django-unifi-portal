@@ -3,7 +3,6 @@ from django.forms import ModelForm
 from django.template import Template
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import AuthenticationForm
-from django.conf import settings
 
 from material import Layout, Row, Fieldset
 from . import form_mixin as forms

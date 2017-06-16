@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from social_core.pipeline.partial import partial
 
-from unifi_portal.models import UnifiUser
+from django_unifi_portal.models import UnifiUser
 
 @partial
 def require_email(strategy, details, user=None, is_new=False, *args, **kwargs):

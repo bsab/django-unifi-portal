@@ -1,7 +1,9 @@
 from django.conf.urls import include, url
-from unifi_portal.views import UserAuthorizeView, UnifiUserLogin, UnifiUserLogout, UnifiUserRegistration
+from django_unifi_portal.views import UserAuthorizeView, UnifiUserLogin, UnifiUserLogout, UnifiUserRegistration
 
 urlpatterns = [
+    #Oauth access
+    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 
     # Front-End access
     url(r'guest/s/default/$', UserAuthorizeView.as_view(), name='index'),

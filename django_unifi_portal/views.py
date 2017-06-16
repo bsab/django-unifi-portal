@@ -6,7 +6,6 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.core.urlresolvers import reverse_lazy
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
@@ -20,11 +19,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
+from django.conf import settings
 
 from unifi_client import UnifiClient
-from unifi_portal import forms
-from unifi_portal.models import UnifiUser
-
+from django_unifi_portal import forms
+from django_unifi_portal.models import UnifiUser
 
 class UserAuthorizeView(SingleObjectMixin, TemplateView):
     """ Authorize a guest based on parameters passed through the request. """

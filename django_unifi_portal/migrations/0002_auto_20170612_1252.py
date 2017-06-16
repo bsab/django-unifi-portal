@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('unifi_portal', '0001_initial'),
+        ('django_unifi_portal', '0001_initial'),
     ]
 
     operations = [

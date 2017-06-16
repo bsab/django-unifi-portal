@@ -15,11 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from material.frontend import urls as frontend_urls
 
-from unifi_portal import urls as unifi_urls
+from django_unifi_portal import urls as unifi_urls
 
 urlpatterns = [
-    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
-    url(r'', include(unifi_urls)),
 ]
