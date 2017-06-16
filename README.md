@@ -1,7 +1,10 @@
 ![Preview](logo-django-unifi.png)
 
-Django-Unifi-Portal is a custom portal with individual usernames and passwords or using **Facebook** authentication/registration mechanism.
-It is a reusable Django app for interacting with the Unifi AP Controller software, version 4 and 5.
+Django-Unifi-Portal is a custom portal based on two authentication/registration mechanism:
+- **_Django_** user authentication system
+- **_Facebook_** OAuth2 logging. 
+
+It is a powerful reusable Django app for interacting with the Unifi AP Controller software, version 4 and 5.
 
 The UniFi® AP is an Access Point ideal for deployment of high-performance wireless networks. [Here](https://www.ubnt.com/unifi/unifi-ap/) you can find more details.
 
@@ -10,7 +13,7 @@ The UniFi® AP is an Access Point ideal for deployment of high-performance wirel
 Overview
 --------
 
-Django-Unifi-Portal works with Django 1.8/1.9/1.10/1.11.
+Django-Unifi-Portal works with Django 1.10/1.11.
 It is based on this [article](https://help.ubnt.com/hc/en-us/articles/204950374-UniFi-Custom-Portal-With-Individual-Usernames-and-Passwords-) from community.
 
 How It Works
