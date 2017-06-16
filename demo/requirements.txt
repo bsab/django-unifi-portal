@@ -1,3 +1,2 @@
 Django==1.11
-django-tables2
-django-unifi-portal
+git+https://github.com/bsab/django-unifi-portal.git
