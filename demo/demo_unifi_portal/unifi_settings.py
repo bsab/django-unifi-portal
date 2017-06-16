@@ -5,11 +5,12 @@
 from django.core.urlresolvers import reverse_lazy
 
 UNIFI_INSTALLED_APPS = [
+    # material apps
+    'material',
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
-    'material',
-    'django_unifi_portal'
+    'django_unifi_portal',
 ]
 
 UNIFI_LOGIN_URL = '/unifi-portal/login'

@@ -1,2 +1,3 @@
 Django==1.11
+django-tables2
 django-unifi-portal

@@ -14,9 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
-
-from django_unifi_portal import urls as unifi_urls
+from views import ListGuestView
 
 urlpatterns = [
+    url(r'^list-unifi-guest/$', ListGuestView.as_view(), name='list_unifi_guest'),
 ]

@@ -25,9 +25,8 @@ from unifi_client import UnifiClient
 from django_unifi_portal import forms
 from django_unifi_portal.models import UnifiUser
 
-class UserAuthorizeView(SingleObjectMixin, TemplateView):
+class UserAuthorizeView(TemplateView):
     """ Authorize a guest based on parameters passed through the request. """
-
     template_name = 'index.html'
 
     def get_user_profile_inst(self):
@@ -41,8 +40,7 @@ class UserAuthorizeView(SingleObjectMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         """Update view context."""
-        #context = super(UserAuthorizeView, self).get_context_data(**kwargs)
-        context={}
+        context = super(UserAuthorizeView, self).get_context_data(**kwargs)
 
         try:
             _mac = self.request.GET.get('id', '')

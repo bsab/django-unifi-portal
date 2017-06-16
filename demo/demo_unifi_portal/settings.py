@@ -35,7 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    #
+    'unifi',
 ]
 
 MIDDLEWARE = [
@@ -118,6 +120,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 
 
 #################################################
@@ -131,7 +135,8 @@ INSTALLED_APPS += UNIFI_INSTALLED_APPS
 LOGIN_URL = UNIFI_LOGIN_URL
 LOGIN_REDIRECT_URL = UNIFI_LOGIN_REDIRECT_URL
 
-TEMPLATES[0]['OPTIONS']['builtins'] = UNIFI_TEMPLATE_BUILTINS
+TEMPLATES[0]['OPTIONS']['context_processors'] += UNIFI_TEMPLATE_CONTEXT_PROCESSORS
+
 # shortcut for in form templates
 try:
     # shortcut for in form templates

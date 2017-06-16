@@ -63,8 +63,8 @@ Quick start
     UNIFI_TIMEOUT_MINUTES = <minutes to offer free wifi> # ex. 8 hours is 480
     
     # Facebook configuration
-    SOCIAL_AUTH_FACEBOOK_KEY = '<facebook app id>'
-    SOCIAL_AUTH_FACEBOOK_SECRET = '<facebook app secret>'
+    SOCIAL_AUTH_FACEBOOK_KEY = unifi
+    SOCIAL_AUTH_FACEBOOK_SECRET = unifi
     ```
 
 You need to map the views to an url in url.py file:
