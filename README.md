@@ -29,7 +29,7 @@ Quick start
 -  Setup Django-Unifi-Portal application in Python environment:
 
 
-       $ pip install git+https://github.com/bsab/django-unifi-portal.git
+       $ pip install django-unifi-portal
 
 
 -  Migrate the django_unifi_portal app to create the user model:
