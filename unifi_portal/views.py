@@ -60,12 +60,14 @@ class UserAuthorizeView(SingleObjectMixin, TemplateView):
                 'url': _url,
                 'last_login': _last_login
             })
+            print "context->", context
 
             # Saving info on userprofile Model
             userprofile = self.get_user_profile_inst()
-            userprofile.guest_mac = _mac
-            userprofile.last_backend_login = _last_login
-            userprofile.save()
+            if userprofile:
+                userprofile.guest_mac = _mac
+                userprofile.last_backend_login = _last_login
+                userprofile.save()
 
             # Ask authorization to unifi server
             unifi_client = UnifiClient()
