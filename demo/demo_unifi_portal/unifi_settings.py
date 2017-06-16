@@ -64,4 +64,20 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, about, email, birthday, gender, hometown, languages'
 }
 
+UNIFI_SERVER = "<your UniFi Server ip>
+UNIFI_PORT = <your Unifi Server Port>  # default is 8443
+UNIFI_VERSION = 'v4'
+UNIFI_SITE_ID = 'default'
+
+# It's important to note that if this server is offsite, you need to have port 8443 forwarded through to it
+UNIFI_SSID = '<your ssid name>'
+UNIFI_LOGO = '<relative path under the static folder to the logo png>'
+
+UNIFI_USER = "<your UniFi Username>"
+UNIFI_PASSWORD = "<your UniFi Password>"
+UNIFI_TIMEOUT_MINUTES = <minutes>  # ex. 8 hours is 480
+
+# Facebook configuration
+SOCIAL_AUTH_FACEBOOK_KEY = "<your Facebook key>"
+SOCIAL_AUTH_FACEBOOK_SECRET = "<your Facebook api secret>"
 
