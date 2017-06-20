@@ -1,9 +1,9 @@
-from django_unifi_portal.unifi_settings import *
+from django.conf import settings
 
 def unifi_context(request):
   ctx = {
-      'logo': UNIFI_LOGO,
-      'ssid': UNIFI_SSID,
-      'timeout': UNIFI_TIMEOUT_MINUTES
+      'logo': settings.UNIFI_LOGO,
+      'ssid': settings.UNIFI_SSID,
+      'timeout': settings.UNIFI_TIMEOUT_MINUTES
   }
   return ctx
