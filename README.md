@@ -68,7 +68,7 @@ Quick start
             'material.frontend.context_processors.modules',
             'social_django.context_processors.backends',
             'social_django.context_processors.login_redirect',
-            'unifi_portal.context_processor.unifi_context'
+            'django_unifi_portal.context_processor.unifi_context'
     ]
     
     UNIFI_TEMPLATE_BUILTINS = 'material.templatetags.material_form'
