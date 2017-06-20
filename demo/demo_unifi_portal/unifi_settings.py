@@ -20,7 +20,7 @@ UNIFI_TEMPLATE_CONTEXT_PROCESSORS = [
         'material.frontend.context_processors.modules',
         'social_django.context_processors.backends',
         'social_django.context_processors.login_redirect',
-        'unifi_portal.context_processor.unifi_context'
+        'django_unifi_portal.context_processor.unifi_context'
 ]
 
 UNIFI_TEMPLATE_BUILTINS = 'material.templatetags.material_form'
@@ -45,7 +45,7 @@ UNIFI_SOCIAL_AUTH_PIPELINE = (
     'django_unifi_portal.pipeline.manage_auth_already_associated',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'django_unifi_portal.pipeline.require_email',
+    #'django_unifi_portal.pipeline.require_email',
     'social_core.pipeline.mail.mail_validation',
     'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',

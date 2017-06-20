@@ -93,7 +93,7 @@ Quick start
         'django_unifi_portal.pipeline.manage_auth_already_associated',
         'social_core.pipeline.social_auth.social_user',
         'social_core.pipeline.user.get_username',
-        'django_unifi_portal.pipeline.require_email',
+        #'django_unifi_portal.pipeline.require_email',
         'social_core.pipeline.mail.mail_validation',
         'social_core.pipeline.user.create_user',
         'social_core.pipeline.social_auth.associate_user',
