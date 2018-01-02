@@ -35,7 +35,8 @@ Quick start
 -  Migrate the django_unifi_portal app to create the user model:
 
 
-        $ migrate django_unifi_portal
+        $ python manage.py migrate django_unifi_portal
+        $ python manage.py migrate 
 
 -  Add "django_unifi_portal" to your INSTALLED\_APPS:
 
