@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'demo_unifi_portal.urls'
@@ -152,3 +153,4 @@ except ImportError:
 
 AUTHENTICATION_BACKENDS = UNIFI_AUTHENTICATION_BACKENDS
 SOCIAL_AUTH_PIPELINE = UNIFI_SOCIAL_AUTH_PIPELINE
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/guest/s/default/'
