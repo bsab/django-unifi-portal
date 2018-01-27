@@ -68,6 +68,12 @@ class UnifiRegistrationForm(ModelForm):
         <button class="waves-effect waves-light btn" type="submit">Submit</button>
     """)
 
+     buttons = Template("""
+        <a href="{% url 'unifi_login' %}" class="waves-effect waves-teal btn-flat">Sign in</a>
+        <button class="waves-effect waves-light btn" type="submit">Login</button>
+    """)
+
+
     title = "Registration"
 
     class Meta:
