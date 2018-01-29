@@ -23,7 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+%q=^7@2k2ipohgguyw@08=2#f#^my&$(3l7+2^l(42nuq-95+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# When debug is False /static will no logner be served by Django. You will need to serve it with Apahce/Nginx
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -153,4 +154,5 @@ except ImportError:
 
 AUTHENTICATION_BACKENDS = UNIFI_AUTHENTICATION_BACKENDS
 SOCIAL_AUTH_PIPELINE = UNIFI_SOCIAL_AUTH_PIPELINE
+#When DEBUG = True Social Auth exception handling to redirected url is disabled
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/guest/s/default/'
