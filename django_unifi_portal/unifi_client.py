@@ -109,6 +109,7 @@ class UnifiClient(object):
         auth_response = self.__session.post(api_url, data=json.dumps(auth))
 
         print "***** UNIFI AUTH RESPONSE *****"
+        print api_url
         print auth_response
         print "*******************************"
 

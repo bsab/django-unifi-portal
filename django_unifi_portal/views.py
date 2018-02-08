@@ -68,7 +68,10 @@ class UserAuthorizeView(TemplateView):
 
             # Ask authorization to unifi server
             unifi_client = UnifiClient()
-            unifi_client.send_authorization(_mac, _ap, _t)
+            status_code = unifi_client.send_authorization(_mac, _ap, _t)
+            if status_code != 200:
+                print "User Unauthorized !"
+                return HttpResponseForbidden()
 
             #if _url:
             #    return HttpResponseRedirect(_url)
