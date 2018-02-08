@@ -20,7 +20,7 @@ class UnifiLoginForm(AuthenticationForm):
     """)
 
     social_buttons = Template("""
-        <p style="text-align:center"><a href="/auth/login/cfacebook" class="waves-effect waves-light btn-large blue"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with facebook</a></p>
+        <p style="text-align:center"><a href="/auth/login/facebook" class="waves-effect waves-light btn-large blue"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with facebook</a></p>
         <br>
     """)
 
