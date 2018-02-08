@@ -83,6 +83,8 @@ class UnifiClient(object):
 
         login_url = self._get_resource_url(login_version)
         login_response = self.__session.post(login_url, data=json.dumps(data), verify=False)
+
+
         return login_response.status_code
 
     def authorize_guest(self,  guest_mac, ap_mac, minutes):
@@ -105,6 +107,11 @@ class UnifiClient(object):
 
         api_url = self._get_resource_url(api_version + 'cmd/stamgr')
         auth_response = self.__session.post(api_url, data=json.dumps(auth))
+
+        print "***** UNIFI AUTH RESPONSE *****"
+        print auth_response
+        print "*******************************"
+
         return auth_response.status_code
 
     def unauthorize_guest(self,  guest_mac):
