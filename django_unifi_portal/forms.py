@@ -64,11 +64,8 @@ class UnifiRegistrationForm(ModelForm):
     {% endform %}
     """)
 
+    #Sign in button to allow user to navigate back to Login form from registration form
     buttons = Template("""
-        <button class="waves-effect waves-light btn" type="submit">Submit</button>
-    """)
-#Sign in button to allow user to navigate back to Login form from registration form 
-     buttons = Template("""
         <a href="{% url 'unifi_login' %}" class="waves-effect waves-teal btn-flat">Sign in</a>
         <button class="waves-effect waves-light btn" type="submit">Login</button>
     """)
