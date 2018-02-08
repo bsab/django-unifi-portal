@@ -122,7 +122,7 @@ class UnifiClient(object):
         if self.version == 'v3' or self.version == 'v4' or self.version == 'v5':
             api_version = 'api/s/' + self.site_id + '/'
 
-        api_url = self._get_resource_url('api/s/default/cmd/stamgr')
+        api_url = self._get_resource_url(api_version + 'cmd/stamgr')
         auth_response = self.__session.post(api_url, data=json.dumps(unauth))
         return auth_response.status_code
 
