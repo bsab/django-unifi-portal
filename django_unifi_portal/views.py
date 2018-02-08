@@ -70,8 +70,7 @@ class UserAuthorizeView(TemplateView):
             unifi_client = UnifiClient()
             status_code = unifi_client.send_authorization(_mac, _ap, _t)
             if status_code != 200:
-                print "User Unauthorized !"
-                return HttpResponseForbidden()
+                context['Unauthorized'] = True
 
             #if _url:
             #    return HttpResponseRedirect(_url)
@@ -88,6 +87,9 @@ class UserAuthorizeView(TemplateView):
     def get(self, request, *args, **kwargs):
         """Response with rendered html template."""
         context = self.get_context_data()
+
+        if 'Unauthorized' in context:
+            return HttpResponseForbidden();
 
         if '_url' in context:
             if context['_url']: #if i try to go on an url without wifi login
