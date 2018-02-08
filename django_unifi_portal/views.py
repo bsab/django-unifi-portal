@@ -89,7 +89,9 @@ class UserAuthorizeView(TemplateView):
         context = self.get_context_data()
 
         if 'Unauthorized' in context:
-            return HttpResponseForbidden();
+            #return HttpResponseForbidden();
+            self.template_name = 'forbidden.html'
+            return self.render_to_response(context)
 
         if '_url' in context:
             if context['_url']: #if i try to go on an url without wifi login
