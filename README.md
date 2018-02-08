@@ -31,6 +31,9 @@ Quick start
 
        $ pip install django-unifi-portal
 
+- To get the latest version
+
+       $ pip install git+https://github.com/bsab/django-unifi-portal.git
 
 -  Migrate the django_unifi_portal app to create the user model:
 
