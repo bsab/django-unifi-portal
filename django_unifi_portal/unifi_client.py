@@ -51,7 +51,7 @@ class UnifiClient(object):
             return url
         else:
             url = str.format('{0}{1}:{2}/', 'https://', self.__unifiServer, '8443')
-            return url;
+            return url
 
     def _is_authorized(self, guest_mac):
         """Return true if the guest is already authorized."""
@@ -142,9 +142,9 @@ class UnifiClient(object):
 
     def send_authorization(self, guest_mac, ap_mac, minutes):
         """ Login on Unifi Server and authorize a guest based on his MAC address"""
-        self.login_on_unifi_server();
+        self.login_on_unifi_server()
 
-        status_code = -1;
+        status_code = -1
         if not self._is_authorized(guest_mac):
             status_code = self.authorize_guest(guest_mac=guest_mac,
                                                minutes=minutes,
