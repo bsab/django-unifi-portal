@@ -17,23 +17,23 @@ class LoginTestCase(unittest.TestCase):
             try:
                 self.user = User.objects.get(username='lennon@thebeatles.com')
             except User.DoesNotExist:
-                self.user = User();
-                self.user.set_password('johnpassword');
-                self.user.username = 'lennon@thebeatles.com';
-                self.user.email = 'lennon@thebeatles.com';
-                self.user.is_active = True;
-                self.user.save();
+                self.user = User()
+                self.user.set_password('johnpassword')
+                self.user.username = 'lennon@thebeatles.com'
+                self.user.email = 'lennon@thebeatles.com'
+                self.user.is_active = True
+                self.user.save()
 
-            fbuserprofile = UnifiUser();
-            fbuserprofile.user = self.user;
-            fbuserprofile.save();
+            fbuserprofile = UnifiUser()
+            fbuserprofile.user = self.user
+            fbuserprofile.save()
         except Exception as exp:
-            print "EXCEPTION:LoginTestCase-->", str(exp)
-            pass;
+            print("EXCEPTION:LoginTestCase-->", str(exp))
+            pass
 
 
     def testIndexView(self):
-        print ">> testIndexView"
+        print(">> testIndexView")
         self.setUp()
         self.client.login(username='lennon@thebeatles.com', password='johnpassword')
 
@@ -41,11 +41,11 @@ class LoginTestCase(unittest.TestCase):
         test_url_samsung='/guest/s/default/?id=88:ad:d2:e4:cf:f4&ap=f0:9f:c2:39:86:f2&t=1496848672&url=http://connectivitycheck.gstatic.com%2fgenerate_204&ssid=ClubLaVela'
         response = self.client.get(test_url_samsung)
 
-        self.assertEqual(response.status_code, 200);
+        self.assertEqual(response.status_code, 200)
 
 
     def testIndexViewWrongUrl(self):
-        print ">> testIndexView"
+        print(">> testIndexView")
         self.setUp()
         self.client.login(username='lennon@thebeatles.com', password='johnpassword')
 
@@ -53,4 +53,4 @@ class LoginTestCase(unittest.TestCase):
         test_url_samsung='/guest/?id=88:ad:d2:e4:cf:f4&ap=f0:9f:c2:39:86:f2&t=1496848672&url=http://connectivitycheck.gstatic.com%2fgenerate_204&ssid=ClubLaVela'
         response = self.client.get(test_url_samsung)
 
-        self.assertEqual(response.status_code, 404);
+        self.assertEqual(response.status_code, 404)

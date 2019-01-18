@@ -30,13 +30,13 @@ class UserAuthorizeView(TemplateView):
     template_name = 'index.html'
 
     def get_user_profile_inst(self):
-        up = None;
+        up = None
         u = User.objects.get(username=self.request.user)
         try:
             up = UnifiUser.objects.get(user=u)
         except:
-            up = None;
-        return up;
+            up = None
+        return up
 
     def get_context_data(self, **kwargs):
         """Update view context."""
@@ -57,7 +57,7 @@ class UserAuthorizeView(TemplateView):
                 'url': _url,
                 'last_login': _last_login
             })
-            print "context->", context
+            print("context->", context)
 
             # Saving info on userprofile Model
             userprofile = self.get_user_profile_inst()
@@ -75,21 +75,21 @@ class UserAuthorizeView(TemplateView):
             #if _url:
             #    return HttpResponseRedirect(_url)
         except Exception as exp_debug:
-            print "EXCEPTION: " + str(exp_debug)
+            print("EXCEPTION: " + str(exp_debug))
             pass
 
         return context
 
     def post(self, request, *args, **kwargs):
         """Deny post requests."""
-        return HttpResponseForbidden();
+        return HttpResponseForbidden()
 
     def get(self, request, *args, **kwargs):
         """Response with rendered html template."""
         context = self.get_context_data()
 
         if 'Unauthorized' in context:
-            #return HttpResponseForbidden();
+            #return HttpResponseForbidden()
             self.template_name = 'forbidden.html'
             return self.render_to_response(context)
 
@@ -124,8 +124,8 @@ class UnifiUserLogin(FormView):
         try:
             request.session['mynext'] = self.request.GET['next']
         except Exception as e:
-            print "EXCEPTION:UnifiUserLogin " + str(e)
-            pass;
+            print("EXCEPTION:UnifiUserLogin " + str(e))
+            pass
 
         return super(UnifiUserLogin, self).dispatch(request, *args, **kwargs)
 
@@ -179,23 +179,23 @@ class UnifiUserRegistration(FormView):
         except:
             self.success_url = reverse_lazy('index') #to test!
 
-        user = form.save(commit=False);
-        user.set_password(form.cleaned_data['password']);
-        user.username = form.cleaned_data['username'].lower();
-        user.email = form.cleaned_data['username'].lower();   #ATTENZIONE: maschero la username con la email
-        user.first_name = form.cleaned_data['first_name'].lower();
-        user.last_name = form.cleaned_data['last_name'].lower();
-        user.is_active = True;
-        user.save();
+        user = form.save(commit=False)
+        user.set_password(form.cleaned_data['password'])
+        user.username = form.cleaned_data['username'].lower()
+        user.email = form.cleaned_data['username'].lower()   #ATTENZIONE: maschero la username con la email
+        user.first_name = form.cleaned_data['first_name'].lower()
+        user.last_name = form.cleaned_data['last_name'].lower()
+        user.is_active = True
+        user.save()
 
-        unifi_user = UnifiUser();
-        unifi_user.user = user;
-        unifi_user.phone = form.cleaned_data['phone'];
-        unifi_user.gender = form.cleaned_data['gender'];
-        unifi_user.save();
+        unifi_user = UnifiUser()
+        unifi_user.user = user
+        unifi_user.phone = form.cleaned_data['phone']
+        unifi_user.gender = form.cleaned_data['gender']
+        unifi_user.save()
 
         # execute login
-        user_logged = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password']);
-        login(self.request, user_logged);
+        user_logged = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+        login(self.request, user_logged)
 
         return HttpResponseRedirect(self.get_success_url())

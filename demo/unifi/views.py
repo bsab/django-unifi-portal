@@ -8,7 +8,7 @@ class ListGuestView(AjaxResponseMixin, ListView):
     template_name = "user_list.html"
 
     def get_queryset(self):
-        return UnifiUser.objects.all();
+        return UnifiUser.objects.all()
 
     #@method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
