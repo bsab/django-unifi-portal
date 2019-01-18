@@ -28,12 +28,12 @@ class LoginTestCase(unittest.TestCase):
             fbuserprofile.user = self.user;
             fbuserprofile.save();
         except Exception as exp:
-            print "EXCEPTION:LoginTestCase-->", str(exp)
+            print("EXCEPTION:LoginTestCase-->", str(exp))
             pass;
 
 
     def testIndexView(self):
-        print ">> testIndexView"
+        print(">> testIndexView")
         self.setUp()
         self.client.login(username='lennon@thebeatles.com', password='johnpassword')
 
@@ -45,7 +45,7 @@ class LoginTestCase(unittest.TestCase):
 
 
     def testIndexViewWrongUrl(self):
-        print ">> testIndexView"
+        print(">> testIndexView")
         self.setUp()
         self.client.login(username='lennon@thebeatles.com', password='johnpassword')
 

@@ -57,7 +57,7 @@ class UserAuthorizeView(TemplateView):
                 'url': _url,
                 'last_login': _last_login
             })
-            print "context->", context
+            print("context->", context)
 
             # Saving info on userprofile Model
             userprofile = self.get_user_profile_inst()
@@ -75,7 +75,7 @@ class UserAuthorizeView(TemplateView):
             #if _url:
             #    return HttpResponseRedirect(_url)
         except Exception as exp_debug:
-            print "EXCEPTION: " + str(exp_debug)
+            print("EXCEPTION: " + str(exp_debug))
             pass
 
         return context
@@ -124,7 +124,7 @@ class UnifiUserLogin(FormView):
         try:
             request.session['mynext'] = self.request.GET['next']
         except Exception as e:
-            print "EXCEPTION:UnifiUserLogin " + str(e)
+            print("EXCEPTION:UnifiUserLogin " + str(e))
             pass;
 
         return super(UnifiUserLogin, self).dispatch(request, *args, **kwargs)

@@ -28,7 +28,7 @@ def user_details(strategy, details, user=None, *args, **kwargs):
     """Update user details using data from provider."""
     if user:
         if not UnifiUser.objects.filter(user=user).exists():
-            print "user_details:UserProfile NOT exist, creating.."
+            print("user_details:UserProfile NOT exist, creating..")
             changed = False  # flag to track changes
             protected = ('username', 'id', 'pk', 'email') + \
                         tuple(strategy.setting('PROTECTED_USER_FIELDS', []))
@@ -43,9 +43,9 @@ def user_details(strategy, details, user=None, *args, **kwargs):
                     current_value = getattr(user, name, None)
                     if not current_value or name not in protected:
                         changed |= current_value != value
-                        # print "user_details::name", name
+                        # print("user_details::name", name)
                         value = value.replace("'", " ")[0:29];
-                        # print "user_details::value", value; #FIX - crash con nomi superiori ai 30 caratteri
+                        # print("user_details::value", value) #FIX - crash con nomi superiori ai 30 caratteri
 
                         setattr(user, name, value)
 
@@ -96,39 +96,39 @@ def save_profile(backend, user, response, *args, **kwargs):
                 pass;
 
             # INIT - 14-12-2016
-            print "FACEBOOK:seleziono lingua"
+            print("FACEBOOK:seleziono lingua")
             try:
                 fb_access_token = response.get('access_token');
                 fb_locale_url = "https://graph.facebook.com/v2.9/" + "/me?fields=locale,location" + "&access_token=" + fb_access_token;
-                print fb_locale_url
+                print(fb_locale_url)
                 r = requests.get(fb_locale_url)
 
                 if r.status_code == 200:
                     fb_response = json.loads(str(r.text.encode("utf-8")))
-                    print "fb response :", fb_response
+                    print("fb response :", fb_response)
 
                     # language
                     try:
-                        print "***LANG :", fb_response.get('locale')[0:2]
+                        print("***LANG :", fb_response.get('locale')[0:2])
                         profile.language = fb_response.get('locale')[0:2]
                     except:
                         pass;
 
                     # city
                     try:
-                        print "***LOCATION :", fb_response.get('location')
+                        print("***LOCATION :", fb_response.get('location'))
                         profile.city = fb_response.get('location')['name']
                     except:
                         pass;
 
             except Exception as e:
-                print "FB Exception with locale " + str(e)
+                print("FB Exception with locale " + str(e))
                 pass;
             profile.last_backend_login = backend.name;
             profile.save();
     else:
         # in questo caso sto solo richiedendo una nuova associazione social
-        print "UserProfile already exist..nothing..."
+        print("UserProfile already exist..nothing...")
 
         # questo e' il caso di un utente che ha cancellato l'account
         # e' poi ritornato successivamente
