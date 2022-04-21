@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class UnifiUser(models.Model):
     """Base module registered unifi user."""
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='profile_images', default='profile_images/user_no_image.png',null=True)
     language = models.CharField(max_length=8, default='it-IT')  # aggiunto il 22/11/2016
     gender = models.CharField(max_length=10, null=True)
